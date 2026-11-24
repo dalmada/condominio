@@ -3,13 +3,13 @@
 {% block extra_head %}
   {% if period %}
     <link rel="stylesheet" href="{% static 'ledger/react-overview.css' %}">
-    <link rel="stylesheet" href="{% static 'ledger/expense-chart-motion.css' %}">
+    <link rel="stylesheet" href="{% static 'ledger/expense-chart-motion.css' %}?v=2">
   {% endif %}
 {% endblock %}
 {% block extra_js %}
   {% if period %}
     {{ overview_data|json_script:"patio-overview-data" }}
-    <script src="{% static 'ledger/react-overview.js' %}" defer></script>
+    <script src="{% static 'ledger/react-overview.js' %}?v=2" defer></script>
   {% endif %}
 {% endblock %}
 {% block content %}

@@ -15,3 +15,13 @@
   from { --expense-pie-sweep: 0deg; }
   to { --expense-pie-sweep: 360deg; }
 }
+
+.expense-pie-interactive { display: block; }
+.expense-slice { pointer-events: none; }
+.expense-slice[data-active="true"] { filter: brightness(1.14); }
+.expense-legend-entry[data-active="true"] { background: var(--paper); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .expense-slice { transition: transform 180ms ease-out, filter 180ms ease-out; }
+  .expense-slice[data-active="true"] { transform: translate(var(--slice-x), var(--slice-y)); }
+}
