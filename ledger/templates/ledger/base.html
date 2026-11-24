@@ -8,6 +8,7 @@
     <title>{% block title %}Visão geral{% endblock %} · Luís Gustavo Residence</title>
     <link rel="icon" href="{% static 'ledger/residence-favicon.png' %}" type="image/png">
     <link rel="stylesheet" href="{% static 'ledger/app.css' %}">
+    <link rel="stylesheet" href="{% static 'ledger/mobile-nav.css' %}">
     {% block extra_head %}{% endblock %}
     <link rel="stylesheet" href="{% static 'ledger/residence.css' %}">
   </head>
@@ -20,7 +21,14 @@
            aria-label="Luís Gustavo Residence, visão geral">
           <img class="residence-logo" src="{% static 'ledger/luis-gustavo-residence.webp' %}" alt="Luís Gustavo Residence">
         </a>
-        <nav aria-label="Navegação principal">
+        <button class="mobile-menu-toggle icon-button" type="button"
+                aria-controls="main-navigation" aria-expanded="false" aria-label="Abrir menu">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+            <path class="menu-bars" d="M3 6h18M3 12h18M3 18h18"/>
+            <path class="menu-close" d="m5 5 14 14M19 5 5 19"/>
+          </svg>
+        </button>
+        <nav id="main-navigation" aria-label="Navegação principal">
           {% with n=request.resolver_match.url_name %}
             <a href="{% url 'dashboard' %}"
                {% if n == 'dashboard' or n == 'period_detail' %}aria-current="page"{% endif %}>{% icon "grid" %}
@@ -66,6 +74,7 @@
       </main>
     </div>
     <script src="{% static 'ledger/money.js' %}" defer></script>
+    <script src="{% static 'ledger/mobile-nav.js' %}" defer></script>
     {% block extra_js %}{% endblock %}
     {% block scripts %}{% endblock %}
   </body>
