@@ -1,0 +1,42 @@
+{% extends "ledger/base.html" %}
+{% load ledger_ui %}
+{% block title %}Rateio do apartamento {{ unit.display_name|default:unit.code }}{% endblock %}
+{% block content %}
+  <a class="back" href="{% url 'period_detail' period.pk %}">{% icon "back" %} Visão geral</a>
+  <header class="page-head">
+    <div>
+      <span class="eyebrow">{{ period.month|month_label }}</span>
+      <h1>Apartamento {{ unit.display_name|default:unit.code }}</h1>
+    </div>
+    {% if unit.statement %}
+      <a class="btn btn-secondary" href="{% url 'charge' period.pk unit.id %}">Cobrança</a>
+    {% endif %}
+  </header>
+  <section class="panel">
+    <div class="section-head">
+      <h2>Despesas do apartamento</h2>
+      <div>
+        <small>{% if unit.incomplete %}Total parcial{% elif unit.provisional %}Total provisório{% else %}Total rateado{% endif %}</small>
+        <strong>{{ unit.display_total|money }}</strong>
+      </div>
+    </div>
+    {% if period.state == "revising" %}
+      <p class="muted">Valor publicado {{ unit.statement.total_cents|money }} · Diferença no rateio {{ unit.difference|money }}</p>
+    {% endif %}
+    {% for item in unit.items %}
+      <div class="unit-row">
+        <div class="grow">
+          <b>{{ item.category }}</b>
+          <small>
+            {{ item.rule }}
+            {% if item.gas_volume != None %} · {{ item.gas_volume|volume }} m³{% endif %}
+            {% if item.pending %} · {% if item.amount == None %}Pendente{% else %}Provisório{% endif %}{% endif %}
+          </small>
+        </div>
+        <strong>{{ item.amount|money }}</strong>
+      </div>
+    {% empty %}
+      <p class="muted">Este apartamento ainda não tem despesas no mês.</p>
+    {% endfor %}
+  </section>
+{% endblock %}

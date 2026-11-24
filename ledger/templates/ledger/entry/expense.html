@@ -1,0 +1,82 @@
+{% extends "ledger/base.html" %}
+{% load static ledger_ui %}
+{% block title %}{% if expense %}Editar despesa{% else %}Lançar despesa{% endif %}{% endblock %}
+{% block extra_head %}
+    <link rel="stylesheet" href="{% static 'ledger/entry.css' %}">
+{% endblock %}
+{% block content %}
+    <div class="page-head">
+        <div><p class="eyebrow">{{ period.month|date:"F Y" }}</p><h1>{% if expense %}Editar despesa{% else %}Lançar despesa{% endif %}</h1></div>
+        <a class="btn btn-secondary" href="{% url 'period_detail' period.pk %}">Voltar</a>
+    </div>
+    <form class="panel entry-form"
+          method="post"
+          enctype="multipart/form-data"
+          data-entry-form>
+        {% csrf_token %}
+        {% if duplicate_token %}
+            <input type="hidden" name="duplicate_token" value="{{ duplicate_token }}">
+        {% endif %}
+        {% if duplicates %}
+            <section class="notice warn" role="alert">
+                <h2>Possível duplicidade</h2>
+                <p>Já existe lançamento com a mesma categoria, fornecedor, valor e vencimento nesta competência. Confira antes de salvar.</p>
+                <ul>
+                    {% for other in duplicates %}
+                        <li>
+                            <b>{{ other.description }}</b> · {{ other.category }}{% if other.supplier %} · {{ other.supplier }}{% endif %} · {{ other.amount_cents|money }} · vencimento {{ other.due_on|date:"d/m/Y" }}{% if other.service_on %} · serviço em {{ other.service_on|date:"d/m/Y" }}{% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </section>
+        {% endif %}
+        {{ form.non_field_errors }}
+        <div class="form-grid">
+            {% include "ledger/entry/field.html" with field=form.category %}
+            {% include "ledger/entry/field.html" with field=form.supplier %}
+            <div data-manual-amount>{% include "ledger/entry/field.html" with field=form.amount %}</div>
+            {% include "ledger/entry/field.html" with field=form.due_on %}
+            {% include "ledger/entry/field.html" with field=form.rule %}
+        </div>
+        <div class="form-grid">
+            <div data-entry-period>
+                {% include "ledger/entry/field.html" with field=form.consumed_from %}
+            </div>
+            <div data-entry-period>{% include "ledger/entry/field.html" with field=form.consumed_to %}</div>
+            <div data-for-rule="measured mixed">
+                {% include "ledger/entry/field.html" with field=form.invoice_volume %}
+            </div>
+            <div data-for-rule="mixed">
+                {% include "ledger/entry/field.html" with field=form.fixed_amount %}
+            </div>
+        </div>
+        {% include "ledger/entry/participants.html" %}
+        <div data-gas-summary data-price-cents="{{ gas_price_cents }}" hidden>
+            <strong>Total do gás</strong>
+            <output data-gas-total></output>
+        </div>
+        {% include "ledger/entry/field.html" with field=form.attachment %}
+        {% if pending_attachment %}<p class="entry-help">Selecione novamente <strong>{{ pending_attachment }}</strong> para incluir o anexo ao salvar.</p>{% endif %}
+        {% if expense.attachment %}
+            <a href="{% url 'expense_attachment' expense.pk %}">Baixar anexo atual</a>
+            <label class="entry-check">{{ form.remove_attachment }} {{ form.remove_attachment.label }}</label>
+            {{ form.remove_attachment.errors }}
+        {% endif %}
+        <div class="actions">
+            {% if duplicate_token %}
+                <button class="btn btn-primary"
+                        type="submit"
+                        name="confirm_duplicate"
+                        value="1">Confirmar e salvar mesmo assim</button>
+            {% else %}
+                <button class="btn btn-primary" type="submit">Salvar lançamento</button>
+            {% endif %}
+            {% if expense %}<a class="btn btn-secondary"
+                               href="{% url 'expense_delete' expense.pk %}">Remover lançamento</a>{% endif %}
+        </div>
+    </form>
+    {{ defaults|json_script:"entry-category-defaults" }}
+{% endblock %}
+{% block extra_js %}
+    <script src="{% static 'ledger/entry.js' %}" defer></script>
+{% endblock %}

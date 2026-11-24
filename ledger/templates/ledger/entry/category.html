@@ -1,0 +1,30 @@
+{% extends "ledger/base.html" %}
+{% load static %}
+{% block title %}{{ category.name|default:"Nova categoria" }}{% endblock %}
+{% block extra_head %}
+    <link rel="stylesheet" href="{% static 'ledger/entry.css' %}">
+{% endblock %}
+{% block content %}
+    <div class="page-head">
+        <div>
+            <p class="eyebrow">Categorias</p>
+            <h1>{{ category.name|default:"Nova categoria" }}</h1>
+        </div>
+        <a class="btn btn-secondary" href="{% url 'category_list' %}">Voltar</a>
+    </div>
+    <form class="panel entry-form" method="post" data-entry-form>
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        <div class="form-grid">
+            {% include "ledger/entry/field.html" with field=form.name %}
+            {% include "ledger/entry/field.html" with field=form.supplier %}
+            {% include "ledger/entry/field.html" with field=form.rule %}
+        </div>
+        {% include "ledger/entry/participants.html" %}
+        <p class="entry-help">Ao salvar, o critério e as unidades selecionadas passam a preencher os novos lançamentos desta categoria.</p>
+        <button class="btn btn-primary" type="submit">{% if category.pk %}Salvar alterações{% else %}Criar categoria{% endif %}</button>
+    </form>
+{% endblock %}
+{% block extra_js %}
+    <script src="{% static 'ledger/entry.js' %}" defer></script>
+{% endblock %}

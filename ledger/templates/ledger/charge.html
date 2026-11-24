@@ -1,0 +1,92 @@
+{% extends "ledger/base.html" %}{% load ledger_ui %}{% block title %}Cobrança · {{ doc.code }}{% endblock %}{% block content %}
+<a class="back"
+   href="{% url 'period_detail' period.pk %}?visao=unidades">{% icon "back" %} {{ period.month|month_label }}</a>
+<header class="page-head">
+  <div>
+    <span class="eyebrow">
+      <i class="dot">
+      </i> COBRANÇA INDIVIDUAL</span>
+      <h1>Apartamento {{ doc.display_name|default:doc.code }}</h1>
+      <p>{{ doc.responsible }}</p>
+    </div>
+    <a class="btn btn-secondary" href="{% url 'statement' doc.pk %}">{% icon "print" %} Demonstrativo</a>
+  </header>
+  <div class="metrics">
+    <article>
+      <span class="tile sage">{% icon "receipt" %}</span>
+      <div>
+        <small>Total cobrado</small>
+        <strong>{{ doc.total_cents|money }}</strong>
+      </div>
+    </article>
+    <article>
+      <span class="tile blue">{% icon "wallet" %}</span>
+      <div>
+        <small>Recebido</small>
+        <strong>{{ balance.received_cents|money }}</strong>
+      </div>
+    </article>
+    <article>
+      <span class="tile amber">{% icon "clock" %}</span>
+      <div>
+        {% if balance.credit_cents %}
+          <small>Saldo credor</small>
+          <strong>{{ balance.credit_cents|money }}</strong>
+        {% else %}
+          <small>A receber</small>
+          <strong>{{ balance.outstanding_cents|money }}</strong>
+        {% endif %}
+      </div>
+    </article>
+  </div>
+  <section class="panel">
+    <div class="section-head">
+      <div>
+        <span class="eyebrow">VENCIMENTO {{ doc.due_on|date:"d/m/Y" }}</span>
+        <h2>Pagamentos</h2>
+      </div>
+      <span class="badge">
+        {% if balance.credit_cents %}Saldo credor{% elif not balance.outstanding_cents %}Quitado{% elif balance.paid_partial %}Parcial{% else %}Em aberto{% endif %}
+        {% if balance.overdue %}· Em atraso{% endif %}
+      </span>
+    </div>
+    {% if balance.outstanding_cents or form.errors %}
+      <form method="post">{% csrf_token %}{{ form.token }}{{ form.token.errors }}{{ form.non_field_errors }}<div class="form-grid">
+        {% for field in form.visible_fields %}
+          <div class="field">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}{{ field.errors }}
+          </div>
+        {% endfor %}
+        </div>
+        <button class="btn btn-primary">Registrar pagamento</button>
+      </form>
+    {% endif %}
+    {% for m in movements %}
+      <div class="movement">
+        <div class="unit-row">
+          <div class="grow">
+            <b>
+            {% if m.reversal_of_id %}Estorno{% else %}Pagamento{% endif %} · {{ m.paid_on|date:"d/m/Y" }}</b>
+            <small>{{ m.note }}</small>
+          </div>
+          <strong>{{ m.amount_cents|money }}</strong>
+        </div>
+        {% if not m.reversal_of_id and not m.reversal %}
+          <details>
+            <summary>Estornar pagamento</summary>
+            <form method="post" action="{% url 'payment_reverse' m.pk %}">
+              {% csrf_token %}
+              <div class="field">
+                <label for="reason-{{ m.pk }}">Motivo do estorno</label>
+                <input id="reason-{{ m.pk }}" name="reason" required maxlength="500">
+              </div>
+              <button class="btn btn-secondary">Confirmar estorno</button>
+            </form>
+          </details>
+        {% endif %}
+      </div>
+    {% empty %}
+      <p class="muted">Nenhum pagamento registrado para esta cobrança.</p>
+    {% endfor %}
+  </section>
+{% endblock %}

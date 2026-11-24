@@ -1,0 +1,11 @@
+.venv/
+var/
+.env
+__pycache__/
+*.py[cod]
+.DS_Store
+
+
+frontend/node_modules/
+ledger/static/ledger/react-overview.js
+ledger/static/ledger/react-overview.css

@@ -1,0 +1,24 @@
+{% extends "ledger/base.html" %}
+{% block title %}{{ heading }}{% endblock %}
+{% block content %}
+    <div class="page-head">
+        <div>
+            <p class="eyebrow">{{ section }}</p>
+            <h1>{{ heading }}</h1>
+        </div>
+        <a class="btn btn-secondary" href="{{ return_url }}">Voltar</a>
+    </div>
+    <form class="panel" method="post">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        <div class="form-grid">
+            {% for field in form %}
+                {% include "ledger/entry/field.html" with field=field %}
+            {% endfor %}
+        </div>
+        <div class="actions">
+            <button class="btn btn-primary"
+                    type="submit">{{ save_label|default:"Salvar alterações" }}</button>
+        </div>
+    </form>
+{% endblock %}

@@ -1,0 +1,23 @@
+# SVG paths for the application's navigational icons.
+PATHS = {
+    "brand": "M2 20V6l7-4v18m0-14 6-3v17m0-11 7-3v14M2 20h20",
+    "grid": "M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z",
+    "history": "M3 11a9 9 0 1 1 2.5 7M3 4v7h7m2-4v5l3 2",
+    "units": "M4 21V5l10-2v18M14 9h6v12M2 21h20M7 8h3M7 12h3M7 16h3M17 13h1M17 17h1",
+    "layers": "m3 8 9-5 9 5-9 5zM3 12l9 5 9-5M3 16l9 5 9-5",
+    "logout": "M10 4H4v16h6m4-13 5 5-5 5m-6-5h11",
+    "calendar": "M4 6h16v15H4zM7 3v5m10-5v5M4 11h16",
+    "plus": "M12 5v14M5 12h14", "arrow": "M4 12h15m-6-6 6 6-6 6",
+    "chevron": "m9 5 7 7-7 7", "back": "m14 5-7 7 7 7",
+    "wallet": "M3 7h17v13H3zM3 7V5l13-2v4M15 11h6v5h-6z",
+    "receipt": "M5 3h14v18l-3-2-4 2-4-2-3 2zM8 8h8m-8 4h6",
+    "check": "m4 12 5 5L20 6", "clock": "M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0m-9-5v5l4 2",
+    "print": "M7 9V3h10v6M6 17H3V9h18v8h-3M7 14h10v7H7z",
+    "lock": "M5 10h14v11H5zM8 10V7a4 4 0 0 1 8 0v3",
+    "water": "M12 2C9 6 5 10 5 14a7 7 0 1 0 14 0c0-4-4-8-7-12z",
+    "bolt": "m13 2-9 12h7l-1 8 10-13h-8z",
+    "gas": "M13 2c1 6-6 7-4 13-2 0-3-2-3-4-5 8 2 12 7 10 8-2 5-9 4-12-1 2-2 3-3 3 2-4 1-7-1-10z",
+    "clean": "m9 12 8-10m-5 14 3-4-6-4-3 4m-2 0 9 6-4 4-7-6z",
+    "pie": "M11 3a9 9 0 1 0 10 10H11zM14 2v8h8a9 9 0 0 0-8-8z",
+    "edit": "m4 15 12-12 5 5L9 20l-6 1zM13 6l5 5",
+}

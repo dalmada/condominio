@@ -1,0 +1,19 @@
+{% extends "ledger/base.html" %}
+{% block title %}Remover lançamento{% endblock %}
+{% block content %}
+    <div class="page-head">
+        <div>
+            <p class="eyebrow">Despesas</p>
+            <h1>Remover lançamento</h1>
+        </div>
+    </div>
+    <form class="panel" method="post">
+        {% csrf_token %}
+        <p>Deseja remover <strong>{{ expense.description }}</strong> da prévia desta competência?</p>
+        <div class="actions">
+            <a class="btn btn-secondary"
+               href="{% url 'period_detail' expense.period_id %}">Cancelar</a>
+            <button class="btn btn-primary" type="submit">Remover lançamento</button>
+        </div>
+    </form>
+{% endblock %}

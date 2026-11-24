@@ -1,0 +1,76 @@
+{% load ledger_ui static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Demonstrativo {{ doc.code }} · {{ doc.closing.period.month|date:"m-Y" }} · v{{ doc.closing.version }}</title>
+    <link rel="stylesheet" href="{% static 'ledger/app.css' %}">
+    <link rel="icon" href="{% static 'ledger/mark.svg' %}">
+  </head>
+  <body class="document">
+    <div class="doc-tools">
+      <a class="back"
+         href="{% url 'charge' doc.closing.period_id doc.unit_id %}">{% icon "back" %} Cobrança</a>
+      <button class="btn btn-primary"
+              type="button"
+              onclick="window.print()">{% icon "print" %} Imprimir ou salvar PDF</button>
+    </div>
+    <main class="paper">
+      <header class="paper-head">
+        <div class="brand ink">
+          <span class="brand-mark">{% icon "brand" %} </span>Pátio.
+        </div>
+        <span class="badge">Versão {{ doc.closing.version }}{% if doc.closing.version != doc.closing.period.current_version %} · Substituída{% endif %}
+        </span>
+      </header>
+      <div class="statement-title">
+        <span class="eyebrow">DEMONSTRATIVO DE RATEIO</span>
+        <h1>Apartamento {{ doc.display_name|default:doc.code }}</h1>
+        {% if doc.responsible %}
+          <p>{{ doc.responsible }}</p>
+        {% endif %}
+      </div>
+      <div class="doc-period">
+        <div>
+          <small>Competência</small>
+          <b>{{ doc.closing.period.month|month_label }}</b>
+        </div>
+        <div>
+          <small>Vencimento</small>
+          <b>{{ doc.due_on|date:"d/m/Y" }}</b>
+        </div>
+      </div>
+      <table class="doc-table">
+        <thead>
+          <tr>
+            <th>Despesa e critério de divisão</th>
+            <th class="num">Sua parcela</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in doc.items %}
+            <tr>
+              <td>
+                <b>{{ item.description }}</b>
+                <small>{{ item.category }} · {{ item.rule_label }} · {{ item.criterion }}</small>
+              </td>
+              <td class="num">{{ item.share_cents|money }}</td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="2">Unidade sem participação nas despesas desta competência.</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <div class="doc-total">
+        <b>Total da cobrança</b>
+        <strong>{{ doc.total_cents|money }}</strong>
+      </div>
+      <footer>
+        Fechado em {{ doc.closing.created_at|date:"d/m/Y" }} · Versão {{ doc.closing.version }}
+      </footer>
+    </main>
+  </body>
+</html>

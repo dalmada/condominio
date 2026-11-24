@@ -1,0 +1,28 @@
+<fieldset class="entry-group">
+    <legend>Unidades participantes</legend>
+    <p class="entry-help">A ocupação é informativa. Selecione as unidades que participam deste rateio.</p>
+    {% for row in form.unit_rows %}
+        <div class="entry-unit" data-code="{{ row.unit.code }}">
+            <div class="entry-unit-name"><strong>{{ row.unit.code }}{% if row.unit.display_name %} · {{ row.unit.display_name }}{% endif %}</strong><small>{% if row.unit.occupied %}Ocupado{% else %}Vazio{% endif %}</small></div>
+            <label class="entry-check">{{ row.enabled }} Participa<span class="sr-only"> — {{ row.unit.code }}</span></label>
+            <div data-for-rule="percent">
+                {% include "ledger/entry/field.html" with field=row.percentage %}
+            </div>
+            {% if row.previous %}
+                <div data-for-rule="measured mixed">
+                    {% include "ledger/entry/field.html" with field=row.previous %}
+                </div>
+                <div data-for-rule="measured mixed">
+                    {% include "ledger/entry/field.html" with field=row.current %}
+                </div>
+                <div data-for-rule="measured mixed" data-water-only>
+                    {% include "ledger/entry/field.html" with field=row.hot_previous %}
+                </div>
+                <div data-for-rule="measured mixed" data-water-only>
+                    {% include "ledger/entry/field.html" with field=row.hot_current %}
+                </div>
+                <output data-gas-unit hidden aria-label="Valor do gás da unidade {{ row.unit.code }}"></output>
+            {% endif %}
+        </div>
+    {% endfor %}
+</fieldset>

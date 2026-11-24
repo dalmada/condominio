@@ -1,0 +1,73 @@
+{% load static ledger_ui %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="theme-color" content="#173b34">
+    <title>{% block title %}Visão geral{% endblock %} · Pátio</title>
+    <link rel="icon" href="{% static 'ledger/mark.svg' %}" type="image/svg+xml">
+    <link rel="stylesheet" href="{% static 'ledger/app.css' %}">
+    {% block extra_head %}{% endblock %}
+  </head>
+  <body class="{% block body_class %}{% endblock %}">
+    <a class="skip" href="#principal">Pular para o conteúdo</a>
+    <div class="shell">
+      <aside class="sidebar">
+        <a class="brand"
+           href="{% url 'dashboard' %}"
+           aria-label="Pátio, visão geral">
+          <span class="brand-mark">{% icon "brand" %}</span>
+          <span>Pátio<span class="brand-dot">.</span>
+          </span>
+        </a>
+        <nav aria-label="Navegação principal">
+          {% with n=request.resolver_match.url_name %}
+            <a href="{% url 'dashboard' %}"
+               {% if n == 'dashboard' or n == 'period_detail' %}aria-current="page"{% endif %}>{% icon "grid" %}
+              <span>Visão geral</span>
+            </a>
+            <a href="{% url 'history' %}"
+               {% if n == 'history' %}aria-current="page"{% endif %}>{% icon "history" %}
+              <span>Histórico</span>
+            </a>
+            <a href="{% url 'unit_list' %}"
+               {% if n == 'unit_list' %}aria-current="page"{% endif %}>{% icon "units" %}
+              <span>Unidades</span>
+            </a>
+            <a href="{% url 'category_list' %}"
+               {% if n == 'category_list' %}aria-current="page"{% endif %}>{% icon "layers" %}
+              <span>Categorias</span>
+            </a>
+          {% endwith %}
+        </nav>
+        <div class="side-bottom">
+          <span class="account-initial">{{ request.user.username|slice:":1"|upper }}</span>
+          <span class="account-text">
+            <b>{{ request.user.username }}</b>
+            <small>Administrador</small>
+          </span>
+          <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button class="icon-button" aria-label="Sair" title="Sair">{% icon "logout" %}</button>
+          </form>
+        </div>
+      </aside>
+      <main id="principal" class="canvas">
+        <div class="content">
+          {% if messages %}
+            <div aria-live="polite">
+              {% for msg in messages %}
+                <div class="notice {{ msg.tags }}">{{ msg }}</div>
+              {% endfor %}
+            </div>
+          {% endif %}
+          {% block content %}{% endblock %}
+        </div>
+      </main>
+    </div>
+    <script src="{% static 'ledger/money.js' %}" defer></script>
+    {% block extra_js %}{% endblock %}
+    {% block scripts %}{% endblock %}
+  </body>
+</html>

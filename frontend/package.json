@@ -1,0 +1,14 @@
+{
+  "name": "patio-web",
+  "private": true,
+  "scripts": {
+    "build": "esbuild overview.jsx --bundle --minify --outfile=../ledger/static/ledger/react-overview.js && tailwindcss -i overview.css -o ../ledger/static/ledger/react-overview.css --minify"
+  },
+  "dependencies": {
+    "@tailwindcss/cli": "4.3.5",
+    "esbuild": "0.28.2",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "tailwindcss": "4.3.5"
+  }
+}

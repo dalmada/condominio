@@ -1,0 +1,36 @@
+{% extends "ledger/base.html" %}
+{% block title %}Categorias{% endblock %}
+{% block content %}
+    <div class="page-head">
+        <div>
+            <p class="eyebrow">Cadastros</p>
+            <h1>Categorias</h1>
+        </div>
+        <a class="btn btn-primary" href="{% url 'category_create' %}">Nova categoria</a>
+    </div>
+    <div class="panel">
+        <div class="scroll">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Categoria</th>
+                        <th>Fornecedor</th>
+                        <th>Regra padrão</th>
+                        <th><span class="sr-only">Ações</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for category in categories %}
+                        <tr>
+                            <th scope="row">{{ category.name }}</th>
+                            <td>{{ category.supplier|default:"—" }}</td>
+                            <td>{{ category.get_default_rule_display|default:"Aguardando definição" }}</td>
+                            <td><a href="{% url 'category_edit' category.pk %}"
+                                   aria-label="Configurar {{ category.name }}">Configurar</a></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
