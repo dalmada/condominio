@@ -93,3 +93,16 @@ Os testes locais da operação usam dados descartáveis e rodam pelo comando aba
 ```sh
 .venv/bin/python -m unittest discover -s ops -p 'test_*.py' -v
 ```
+
+## Importação do SQLite no Supabase
+
+Crie o schema privado `patio` no projeto de destino. Configure `RATEIO_DATABASE_URL` no ambiente local com uma conexão direta ou de pooler em modo sessão. Digite a credencial apenas em um terminal local confiável ou no gerenciador de variáveis da hospedagem.
+
+Com uma cópia consistente do SQLite em mãos, aplique o schema do Django e execute o importador.
+
+```sh
+.venv/bin/python manage.py migrate --noinput
+.venv/bin/python manage.py import_patio_sqlite /caminho/da/copia/db.sqlite3
+```
+
+O importador recusa um destino com dados de uso e confere as contagens e o valor total das despesas antes de confirmar a transação. Ele copia os registros e as contas do Django. Se houver anexos, copie os arquivos separadamente para o armazenamento privado usado em produção. Mantenha o SQLite original até conferir os saldos no novo ambiente.
