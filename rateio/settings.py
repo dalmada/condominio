@@ -8,9 +8,11 @@ from django.core.exceptions import ImproperlyConfigured
 from .database import postgres_config
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-DATA_DIR = Path(os.environ.get("RATEIO_DATA_DIR", BASE_DIR / "var")).resolve()
+ON_VERCEL = os.environ.get("VERCEL") == "1"
+DEFAULT_DATA_DIR = Path("/tmp/patio") if ON_VERCEL else BASE_DIR / "var"
+DATA_DIR = Path(os.environ.get("RATEIO_DATA_DIR", DEFAULT_DATA_DIR)).resolve()
 DATA_DIR.mkdir(mode=0o700, parents=True, exist_ok=True)
-PRODUCTION = os.environ.get("RATEIO_PRODUCTION", "") == "1"
+PRODUCTION = ON_VERCEL or os.environ.get("RATEIO_PRODUCTION", "") == "1"
 DEBUG = not PRODUCTION
 SECRET_KEY = os.environ.get("RATEIO_SECRET_KEY", "")
 if not SECRET_KEY:
@@ -29,6 +31,9 @@ if not SECRET_KEY:
 ALLOWED_HOSTS = [value.strip() for value in os.environ.get(
     "RATEIO_ALLOWED_HOSTS", "localhost,127.0.0.1,[::1]" if DEBUG else ""
 ).split(",") if value.strip()]
+if ON_VERCEL:
+    ALLOWED_HOSTS += [host for name in ("VERCEL_URL", "VERCEL_PROJECT_PRODUCTION_URL")
+                      if (host := os.environ.get(name))]
 if PRODUCTION and not ALLOWED_HOSTS:
     raise ImproperlyConfigured("Defina RATEIO_ALLOWED_HOSTS para produção.")
 CSRF_TRUSTED_ORIGINS = [f"https://{host}" for host in ALLOWED_HOSTS if host != "*"]
@@ -59,6 +64,8 @@ DATABASES = {"default": {
 database_url = os.environ.get("RATEIO_DATABASE_URL")
 if database_url:
     DATABASES["default"] = postgres_config(database_url)
+elif ON_VERCEL:
+    raise ImproperlyConfigured("Configure RATEIO_DATABASE_URL na Vercel.")
 
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
@@ -87,3 +94,4 @@ SECURE_HSTS_INCLUDE_SUBDOMAINS = PRODUCTION
 SECURE_HSTS_PRELOAD = PRODUCTION
 if os.environ.get("RATEIO_TRUST_PROXY") == "1":
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
