@@ -4,11 +4,12 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="theme-color" content="#173b34">
-    <title>{% block title %}Visão geral{% endblock %} · Pátio</title>
-    <link rel="icon" href="{% static 'ledger/mark.svg' %}" type="image/svg+xml">
+    <meta name="theme-color" content="#0b0b0b">
+    <title>{% block title %}Visão geral{% endblock %} · Luís Gustavo Residence</title>
+    <link rel="icon" href="{% static 'ledger/residence-icon.svg' %}" type="image/svg+xml">
     <link rel="stylesheet" href="{% static 'ledger/app.css' %}">
     {% block extra_head %}{% endblock %}
+    <link rel="stylesheet" href="{% static 'ledger/residence.css' %}">
   </head>
   <body class="{% block body_class %}{% endblock %}">
     <a class="skip" href="#principal">Pular para o conteúdo</a>
@@ -16,10 +17,8 @@
       <aside class="sidebar">
         <a class="brand"
            href="{% url 'dashboard' %}"
-           aria-label="Pátio, visão geral">
-          <span class="brand-mark">{% icon "brand" %}</span>
-          <span>Pátio<span class="brand-dot">.</span>
-          </span>
+           aria-label="Luís Gustavo Residence, visão geral">
+          <img class="residence-logo" src="{% static 'ledger/luis-gustavo-residence.svg' %}" alt="Luís Gustavo Residence">
         </a>
         <nav aria-label="Navegação principal">
           {% with n=request.resolver_match.url_name %}

@@ -1,0 +1,17 @@
+@property --expense-pie-sweep {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 360deg;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .expense-pie-animated {
+    mask-image: conic-gradient(#000 0deg var(--expense-pie-sweep), transparent var(--expense-pie-sweep) 360deg);
+    animation: expense-pie-reveal 900ms cubic-bezier(.2, .65, .3, 1) both;
+  }
+}
+
+@keyframes expense-pie-reveal {
+  from { --expense-pie-sweep: 0deg; }
+  to { --expense-pie-sweep: 360deg; }
+}

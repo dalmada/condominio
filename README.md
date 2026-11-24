@@ -1,4 +1,4 @@
-# Pátio · Rateio residencial
+# Luís Gustavo Residence · Rateio residencial
 
 Aplicação em português para um administrador lançar contas do prédio, calcular as parcelas de quatro apartamentos e acompanhar os pagamentos. Usa Django 5.2, SQLite e impressão pelo navegador.
 

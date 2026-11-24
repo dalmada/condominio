@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Demonstrativo {{ doc.code }} · {{ doc.closing.period.month|date:"m-Y" }} · v{{ doc.closing.version }}</title>
     <link rel="stylesheet" href="{% static 'ledger/app.css' %}">
-    <link rel="icon" href="{% static 'ledger/mark.svg' %}">
+    <link rel="icon" href="{% static 'ledger/residence-icon.svg' %}">
+    <link rel="stylesheet" href="{% static 'ledger/residence.css' %}">
   </head>
   <body class="document">
     <div class="doc-tools">
@@ -19,7 +20,7 @@
     <main class="paper">
       <header class="paper-head">
         <div class="brand ink">
-          <span class="brand-mark">{% icon "brand" %} </span>Pátio.
+          <img class="residence-logo" src="{% static 'ledger/luis-gustavo-residence.svg' %}" alt="Luís Gustavo Residence">
         </div>
         <span class="badge">Versão {{ doc.closing.version }}{% if doc.closing.version != doc.closing.period.current_version %} · Substituída{% endif %}
         </span>

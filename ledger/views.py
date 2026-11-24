@@ -39,7 +39,7 @@ def category_style(name):
     return "layers", "sage"
 
 
-EXPENSE_COLORS = ("#17604f", "#438397", "#c78839", "#a55c54", "#765d91", "#758447")
+EXPENSE_COLORS = ("#8a6510", "#544936", "#c99b2b", "#27231a", "#ad9870", "#6f593d")
 
 
 def expense_chart(rows):

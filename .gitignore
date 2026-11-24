@@ -9,3 +9,4 @@ __pycache__/
 frontend/node_modules/
 ledger/static/ledger/react-overview.js
 ledger/static/ledger/react-overview.css
+staticfiles/

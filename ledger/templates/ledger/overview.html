@@ -1,7 +1,10 @@
 {% extends "ledger/base.html" %}
 {% load ledger_ui static %}
 {% block extra_head %}
-  {% if period %}<link rel="stylesheet" href="{% static 'ledger/react-overview.css' %}">{% endif %}
+  {% if period %}
+    <link rel="stylesheet" href="{% static 'ledger/react-overview.css' %}">
+    <link rel="stylesheet" href="{% static 'ledger/expense-chart-motion.css' %}">
+  {% endif %}
 {% endblock %}
 {% block extra_js %}
   {% if period %}
@@ -35,7 +38,7 @@
           <p>Abra o mês para lançar despesas e conferir quanto cabe a cada apartamento.</p>
           <a class="btn btn-accent" href="{% url 'period_create' %}">{% icon "plus" %} Abrir competência</a>
         </div>
-        {% include "ledger/facade.html" %}
+        <span class="residence-ornament" aria-hidden="true"></span>
       </section>
       <div class="split">
         <section class="panel">
@@ -93,7 +96,7 @@
             </span>
           </div>
         </div>
-        {% include "ledger/facade.html" %}
+        <span class="residence-ornament" aria-hidden="true"></span>
       </section>
       <div id="patio-unit-cards">
       <div class="metrics unit-metrics">
